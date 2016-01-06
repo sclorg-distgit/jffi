@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: com.kenai.jffi
+Export-Package: com.kenai.jffi;version="@VERSION"
+Bundle-Name: Java Foreign Function Interface
+Bundle-Version: @VERSION
+Bundle-ManifestVersion: 2
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+

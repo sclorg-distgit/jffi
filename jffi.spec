@@ -2,7 +2,7 @@
 %{!?scl:%global pkg_name %{name}}
 %{?java_common_find_provides_and_requires}
 
-%global baserelease 1
+%global baserelease 2
 
 %global cluster jnr
 %global sover 1.2
@@ -98,9 +98,10 @@ jar umf MANIFEST.MF %{buildroot}%{_jnidir}/%{pkg_name}/%{pkg_name}.jar META-INF/
 install -dm 755 %{buildroot}%{_libdir}/%{pkg_name}
 cp -rp target/jni/* %{buildroot}%{_libdir}/%{pkg_name}/
 # create version-less symlink for .so file
-sofile=`find %{buildroot}%{_libdir}/%{pkg_name} -name lib%{pkg_name}-%{sover}.so`
-chmod +x ${sofile}
-ln -sr ${sofile} `dirname ${sofile}`/lib%{pkg_name}.so
+pushd %{buildroot}%{_libdir}/%{pkg_name}/*
+chmod +x lib%{pkg_name}-%{sover}.so
+ln -s lib%{pkg_name}-%{sover}.so lib%{pkg_name}.so
+popd
 
 jar umf NATIVE-MANIFEST.MF %{buildroot}%{_jnidir}/%{pkg_name}/%{pkg_name}-native.jar
 %{?scl:EOF}
@@ -129,6 +130,9 @@ ant -Duse.system.libffi=1 test
 %doc COPYING.GPL COPYING.LESSER LICENSE
 
 %changelog
+* Fri Jul 22 2016 Mat Booth <mat.booth@redhat.com> - 1.2.10-1.2
+- Avoid use of ln -r since it is not available on EL6
+
 * Fri Jul 22 2016 Mat Booth <mat.booth@redhat.com> - 1.2.10-1.1
 - Auto SCL-ise package for rh-eclipse46 collection
 
